@@ -70,3 +70,4 @@ const myRules = [
         answer: "[CURRENT_TIME]" // 特殊指令：自動填入當前時間
     }
 ];
+
