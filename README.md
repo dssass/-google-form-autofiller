@@ -67,8 +67,10 @@ const myRules = [
     }
 ];
 
-###步驟二：組合最終腳本
+
+步驟二：組合最終腳本
 將你在上一步修改好的 myRules 設定檔，貼到下面這個範本的 最上方。
+Generated javascript
 // ↓↓↓ 將你修改好的 myRules 貼在這裡 ↓↓↓
 const myRules = [
   { question: "電子郵件", type: "text", answer: "your-email@example.com" },
@@ -80,8 +82,9 @@ const myRules = [
 
 // --- 以下為核心程式碼，請勿修改 ---
 function runAutoFill(config){console.log("🚀 執行【通用自動填寫腳本】...");function fillInput(inputElement,value){if(!inputElement)return!1;const nativeInputValueSetter=Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype,"value").set;return nativeInputValueSetter.call(inputElement,value),inputElement.dispatchEvent(new Event("input",{bubbles:!0})),!0}function processSpecialValue(value){if("string"!=typeof value)return value;if("[CURRENT_TIME]"===value.toUpperCase()){const now=new Date,hours=String(now.getHours()),minutes=String(now.getMinutes()).padStart(2,"0");return{hours,minutes}}return value}document.querySelectorAll('[role="listitem"]').forEach(block=>{const questionTitleElement=block.querySelector('[role="heading"]');if(questionTitleElement){const questionText=questionTitleElement.textContent.trim();if(questionText){const rule=config.find(r=>questionText.includes(r.question));if(rule){console.log(`✅ 找到匹配規則: "${rule.question}"`);const answer=processSpecialValue(rule.answer);try{switch(rule.type){case"text":case"textarea":{const input=block.querySelector('input[type="text"], textarea');input&&fillInput(input,answer);break}case"radio":{const options=Array.from(block.querySelectorAll('[role="radio"]'));let targetOption;"[RANDOM_CHOICE]"===answer.toUpperCase()?targetOption=options[Math.floor(Math.random()*options.length)]:targetOption=options.find(opt=>opt.parentElement.textContent.trim().includes(answer)),targetOption&&targetOption.click();break}case"checkbox":{const options=Array.from(block.querySelectorAll('[role="checkbox"]')),answers=Array.isArray(answer)?answer:[answer];options.forEach(opt=>{const label=opt.parentElement.textContent.trim();answers.some(ans=>label.includes(ans))&&opt.click()});break}case"time":{const hourInput=block.querySelector('input[aria-label="小時"]'),minuteInput=block.querySelector('input[aria-label="分鐘"]');hourInput&&minuteInput&&"object"==typeof answer&&(fillInput(hourInput,answer.hours),fillInput(minuteInput,answer.minutes));break}case"scale":{const options=Array.from(block.querySelectorAll('[role="radio"]'));let targetOption;"[RANDOM_CHOICE]"===answer.toUpperCase()?targetOption=options[Math.floor(Math.random()*options.length)]:targetOption=options.find(opt=>opt.getAttribute("data-value")===String(answer)),targetOption&&targetOption.click()}}}catch(e){console.error(`處理 "${rule.question}" 時發生錯誤:`,e)}}}}}),console.log("✨ 本次頁面處理完畢！")}runAutoFill(myRules);
-
-###步驟三：建立書籤
+Use code with caution.
+JavaScript
+步驟三：建立書籤
 在你的瀏覽器（Chrome, Firefox, Edge 等）的書籤列上按右鍵，選擇「新增書籤」或「新增頁面」。
 在「名稱」欄位，取一個你好記的名字，例如 自動填寫問卷。
 在「網址 (URL)」欄位，貼上 javascript:，然後緊接著貼上你在步驟二組合好的全部程式碼。
