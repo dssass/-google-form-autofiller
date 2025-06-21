@@ -1,4 +1,4 @@
-【請完整複製並貼上這段文字】
+請進入編輯模式，刪掉所有舊內容，然後完整貼上下面這段程式碼：
 Generated markdown
 # 通用 Google 表單自動填寫書籤工具 (Universal Google Form Auto-filler)
 
