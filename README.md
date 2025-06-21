@@ -19,58 +19,7 @@
 首先，複製下面的設定檔範本。你需要根據**你想自動填寫的表單**來修改它。
 
 ```javascript
-// ▼▼▼ 只需修改這裡的 `myRules` 內容 ▼▼▼
-const myRules = [
-    // --- 範例 1: 填寫文字 (例如 Email 或學號) ---
-    {
-        question: "電子郵件", // 表單上的問題「關鍵字」
-        type: "text",
-        answer: "your-email@example.com" // 在這裡填入「你的」答案
-    },
-    {
-        question: "學號",
-        type: "text",
-        answer: "YOUR_STUDENT_ID" // 在這裡填入「你的」學號
-    },
-    {
-        question: "姓名",
-        type: "text",
-        answer: "王大明"
-    },
-    // --- 範例 2: 選擇一個單選項目 ---
-    {
-        question: "您是否同意以上條款", // 問題關鍵字
-        type: "radio",
-        answer: "同意" // 選項的「完整文字」
-    },
-    {
-        question: "您對本次活動的評價", // 隨機選擇一個選項
-        type: "radio",
-        answer: "[RANDOM_CHOICE]"
-    },
-    // --- 範例 3: 勾選多個複選項目 ---
-    {
-        question: "您感興趣的領域",
-        type: "checkbox",
-        answer: ["科技", "藝術", "運動"] // 將所有想勾選的項目文字放進來
-    },
-    // --- 範例 4: 填寫量表題 (例如 1-5 分) ---
-    {
-        question: "課程的整體滿意度",
-        type: "scale",
-        answer: 5 // 直接填寫分數 (數字)
-    },
-    // --- 範例 5: 填寫時間 ---
-    {
-        question: "填寫時間",
-        type: "time",
-        answer: "[CURRENT_TIME]" // 特殊指令：自動填入當前時間
-    }
-];
-// ▲▲▲ 只需修改這裡的 `myRules` 內容 ▲▲▲
 
-
-/* --- 以下為核心程式碼，請勿修改 --- */
 javascript:(function(){const myRules_data=myRules;console.log("🚀 執行【通用自動填寫腳本】...");function fillInput(e,t){if(!e)return!1;const n=Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype,"value").set;return n.call(e,t),e.dispatchEvent(new Event("input",{bubbles:!0})),!0}function processSpecialValue(e){if("string"!=typeof e)return e;if("[CURRENT_TIME]"===e.toUpperCase()){const e=new Date,t=String(e.getHours()),n=String(e.getMinutes()).padStart(2,"0");return{hours:t,minutes:n}}return e}document.querySelectorAll('[role="listitem"]').forEach(e=>{const t=e.querySelector('[role="heading"]');if(t){const n=t.textContent.trim();if(n){const t=myRules_data.find(e=>n.includes(e.question));if(t){console.log(`✅ 找到匹配規則: "${t.question}"`);const n=processSpecialValue(t.answer);try{switch(t.type){case"text":case"textarea":{const o=e.querySelector('input[type="text"], textarea');o&&fillInput(o,n);break}case"radio":{const o=Array.from(e.querySelectorAll('[role="radio"]'));let r;"[RANDOM_CHOICE]"===n.toUpperCase()?r=o[Math.floor(Math.random()*o.length)]:r=o.find(e=>e.parentElement.textContent.trim().includes(n)),r&&r.click();break}case"checkbox":{const o=Array.from(e.querySelectorAll('[role="checkbox"]')),r=Array.isArray(n)?n:[n];o.forEach(e=>{const t=e.parentElement.textContent.trim();r.some(e=>t.includes(e))&&e.click()});break}case"time":{const o=e.querySelector('input[aria-label="小時"]'),r=e.querySelector('input[aria-label="分鐘"]');o&&r&&"object"==typeof n&&(fillInput(o,n.hours),fillInput(r,n.minutes));break}case"scale":{const o=Array.from(e.querySelectorAll('[role="radio"]'));let r;"[RANDOM_CHOICE]"===n.toUpperCase()?r=o[Math.floor(Math.random()*o.length)]:r=o.find(e=>e.getAttribute("data-value")===String(n)),r&&r.click()}}}catch(e){console.error(`處理 "${t.question}" 時發生錯誤:`,e)}}}}}),console.log("✨ 本次頁面處理完畢！")})();
 ```
 
