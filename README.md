@@ -1,5 +1,3 @@
-請進入編輯模式，刪掉所有舊內容，然後完整貼上下面這段程式碼：
-Generated markdown
 # 通用 Google 表單自動填寫書籤工具 (Universal Google Form Auto-filler)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -38,7 +36,6 @@ const myRules = [
         type: "text",
         answer: "王大明"
     },
-
     // --- 範例 2: 選擇一個單選項目 ---
     {
         question: "您是否同意以上條款", // 問題關鍵字
@@ -50,21 +47,18 @@ const myRules = [
         type: "radio",
         answer: "[RANDOM_CHOICE]"
     },
-
     // --- 範例 3: 勾選多個複選項目 ---
     {
         question: "您感興趣的領域",
         type: "checkbox",
         answer: ["科技", "藝術", "運動"] // 將所有想勾選的項目文字放進來
     },
-    
     // --- 範例 4: 填寫量表題 (例如 1-5 分) ---
     {
         question: "課程的整體滿意度",
         type: "scale",
         answer: 5 // 直接填寫分數 (數字)
     },
-
     // --- 範例 5: 填寫時間 ---
     {
         question: "填寫時間",
@@ -72,13 +66,7 @@ const myRules = [
         answer: "[CURRENT_TIME]" // 特殊指令：自動填入當前時間
     }
 ];
-Use code with caution.
-Markdown
-如何設定 question 欄位？
-你不需要輸入完整的題目，只需要輸入足以辨識該題的「關鍵字」即可。例如題目是「請輸入您的電子郵件地址」，你只需要填 "電子郵件"。
-步驟二：組合最終腳本
-將你在上一步修改好的 myRules 設定檔，貼到下面這個範本的 最上方。
-Generated javascript
+
 // ↓↓↓ 將你修改好的 myRules 貼在這裡 ↓↓↓
 const myRules = [
   { question: "電子郵件", type: "text", answer: "your-email@example.com" },
@@ -90,9 +78,7 @@ const myRules = [
 
 // --- 以下為核心程式碼，請勿修改 ---
 function runAutoFill(config){console.log("🚀 執行【通用自動填寫腳本】...");function fillInput(inputElement,value){if(!inputElement)return!1;const nativeInputValueSetter=Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype,"value").set;return nativeInputValueSetter.call(inputElement,value),inputElement.dispatchEvent(new Event("input",{bubbles:!0})),!0}function processSpecialValue(value){if("string"!=typeof value)return value;if("[CURRENT_TIME]"===value.toUpperCase()){const now=new Date,hours=String(now.getHours()),minutes=String(now.getMinutes()).padStart(2,"0");return{hours,minutes}}return value}document.querySelectorAll('[role="listitem"]').forEach(block=>{const questionTitleElement=block.querySelector('[role="heading"]');if(questionTitleElement){const questionText=questionTitleElement.textContent.trim();if(questionText){const rule=config.find(r=>questionText.includes(r.question));if(rule){console.log(`✅ 找到匹配規則: "${rule.question}"`);const answer=processSpecialValue(rule.answer);try{switch(rule.type){case"text":case"textarea":{const input=block.querySelector('input[type="text"], textarea');input&&fillInput(input,answer);break}case"radio":{const options=Array.from(block.querySelectorAll('[role="radio"]'));let targetOption;"[RANDOM_CHOICE]"===answer.toUpperCase()?targetOption=options[Math.floor(Math.random()*options.length)]:targetOption=options.find(opt=>opt.parentElement.textContent.trim().includes(answer)),targetOption&&targetOption.click();break}case"checkbox":{const options=Array.from(block.querySelectorAll('[role="checkbox"]')),answers=Array.isArray(answer)?answer:[answer];options.forEach(opt=>{const label=opt.parentElement.textContent.trim();answers.some(ans=>label.includes(ans))&&opt.click()});break}case"time":{const hourInput=block.querySelector('input[aria-label="小時"]'),minuteInput=block.querySelector('input[aria-label="分鐘"]');hourInput&&minuteInput&&"object"==typeof answer&&(fillInput(hourInput,answer.hours),fillInput(minuteInput,answer.minutes));break}case"scale":{const options=Array.from(block.querySelectorAll('[role="radio"]'));let targetOption;"[RANDOM_CHOICE]"===answer.toUpperCase()?targetOption=options[Math.floor(Math.random()*options.length)]:targetOption=options.find(opt=>opt.getAttribute("data-value")===String(answer)),targetOption&&targetOption.click()}}}catch(e){console.error(`處理 "${rule.question}" 時發生錯誤:`,e)}}}}}),console.log("✨ 本次頁面處理完畢！")}runAutoFill(myRules);
-Use code with caution.
-JavaScript
-注意：上面的核心程式碼是 autofill.js 的壓縮版，以方便製作書籤。
+
 步驟三：建立書籤
 在你的瀏覽器（Chrome, Firefox, Edge 等）的書籤列上按右鍵，選擇「新增書籤」或「新增頁面」。
 在「名稱」欄位，取一個你好記的名字，例如 自動填寫問卷。
@@ -103,8 +89,3 @@ JavaScript
 打開你想要填寫的 Google 表單頁面。
 點擊一下你在書籤列上建立的那個書籤。
 完成！表單已經根據你的規則自動填好了。
-🤝 貢獻
-歡迎任何形式的貢獻！如果你有新的想法或發現了 Bug，請隨時提出 Issue 或發送 Pull Request。
-📜 授權
-本專案採用 MIT License 授權。
-
